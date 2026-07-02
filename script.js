@@ -50,7 +50,6 @@ function clear() {
     num1 = null;
     num2 = null;
     currentInput.textContent = '';
-    history.textContent = '';
 }
 
 function calculate(operator) {
@@ -58,15 +57,13 @@ function calculate(operator) {
         num1 = +currentInput.textContent;
     } else {
         num2 = +currentInput.textContent;
-        let num1 = operate(num1, num2, operator);
+        num1 = operate(num1, num2, operator);
     }
 
-    history.textContent += ` ${currentInput.textContent} ${operator} `;
     currentInput.textContent = '';
 }
 
 const currentInput = document.querySelector(".current-input");
-const history = document.querySelector(".history");
 const inputsContainer = document.querySelector(".inputs");
 
 let num1 = null;
