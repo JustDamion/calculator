@@ -3,10 +3,11 @@ const OPERATORS = ["+", "-", "x", "/", "%"];
 const currentInput = document.getElementById("currentInput");
 const inputContainer = document.getElementById("inputContainer");
 const errorMessage = document.getElementById("errorMessage");
+const historyScreen = document.getElementById("history");
 
-let firstNumber = null;
-let secondNumber = null;
-let operator = null;
+let firstNumber = '';
+let secondNumber = '';
+let operator = '';
 let lastInput = null;
 let inputValue = null;
 
@@ -19,11 +20,6 @@ inputContainer.addEventListener("click", (event) => {
 
     if (inputValue === "Clear") {
         clear();
-    } else if (inputValue === "=") {
-        secondNumber = +currentInput.textContent;
-        firstNumber = operate(firstNumber, secondNumber, operator)
-        currentInput.textContent = firstNumber;
-        secondNumber = null;
     }
 
     lastInput = inputValue;
@@ -34,20 +30,34 @@ function updateInput(value) {
         if (OPERATORS.includes(lastInput)) {
             currentInput.textContent = '';
         }
-        currentInput.textContent += value;
-    } else if (OPERATORS.includes(value)) {
-        if (firstNumber === null) {
-            firstNumber = +currentInput.textContent;
-            operator = value;
-            currentInput.textContent = '';
+        if (currentInput.textContent === "0") {
+            currentInput.textContent = value;
         } else {
-            secondNumber = +currentInput.textContent;
-            firstNumber = operate(firstNumber, secondNumber, operator)
-            currentInput.textContent = firstNumber;
-            secondNumber = null;
-            operator = value;
+            currentInput.textContent += value;
         }
+    } else if ((OPERATORS.includes(value) || value === "=")) {
+        evaluateOperation(value);
     }
+}
+
+function evaluateOperation(operation) {
+    if (firstNumber === '') {
+        firstNumber = +currentInput.textContent;
+        currentInput.textContent = "0";
+    } else {
+        secondNumber = +currentInput.textContent;
+        firstNumber = operate(firstNumber, secondNumber, operator)
+        currentInput.textContent = firstNumber;
+    }
+    operator = operation;
+
+    if (operation != "=") {
+        historyScreen.textContent = `${firstNumber} ${operator} ${secondNumber}`
+    } else {
+        historyScreen.textContent += secondNumber;
+    }
+
+    secondNumber = '';
 }
 
 function validateInput(input) {
@@ -56,17 +66,18 @@ function validateInput(input) {
         errorMessage.textContent = "Please enter a number";
         return 0;
     }
-    if (currentInput.textContent === '' && (OPERATORS.includes(input) || input === "=")) {
+    if (currentInput.textContent === "0" && (OPERATORS.includes(input) || input === "=")) {
         errorMessage.textContent = "Please enter a number";
         return 0;
     }
 }
 
 function clear() {
-    firstNumber = null;
-    secondNumber = null;
-    currentInput.textContent = '';
+    firstNumber = '';
+    secondNumber = '';
+    currentInput.textContent = "0";
     errorMessage.textContent = '';
+    historyScreen.textContent = '';
 }
 
 function add(a, b) {
