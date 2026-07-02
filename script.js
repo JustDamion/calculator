@@ -42,6 +42,9 @@ function operate(num1, num2, operator) {
 
 function updateInput(value) {
     if (+value || +value === 0) {
+        if (OPERATORS.includes(lastInput)) {
+            currentInput.textContent = '';
+        }
         currentInput.textContent += value;
     } else if (OPERATORS.includes(value)) {
         if (num1 === null) {
@@ -64,7 +67,7 @@ function validateInput(input) {
         error.textContent = "Please enter a number";
         return 0;
     }
-    if (currentInput.textContent === '' && OPERATORS.includes(input)) {
+    if (currentInput.textContent === '' && (OPERATORS.includes(input) || input === "=")) {
         error.textContent = "Please enter a number";
         return 0;
     }
@@ -84,6 +87,7 @@ const error = document.querySelector(".error");
 let num1 = null;
 let num2 = null;
 let operator = null;
+let lastInput = null;
 let inputValue = null;
 
 inputsContainer.addEventListener("click", (event) => {
@@ -101,4 +105,6 @@ inputsContainer.addEventListener("click", (event) => {
         currentInput.textContent = num1;
         num2 = null;
     }
+
+    lastInput = inputValue;
 });
