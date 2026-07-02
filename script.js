@@ -44,20 +44,21 @@ function evaluateOperation(operation) {
     if (firstNumber === '') {
         firstNumber = +currentInput.textContent;
         currentInput.textContent = "0";
-    } else {
+    } else if (lastInput != "=") {
         secondNumber = +currentInput.textContent;
         firstNumber = operate(firstNumber, secondNumber, operator)
         currentInput.textContent = firstNumber;
     }
-    operator = operation;
+    if (operation != "=") {
+        operator = operation;
+    }
+    secondNumber = '';
 
     if (operation != "=") {
         historyScreen.textContent = `${firstNumber} ${operator} ${secondNumber}`
     } else {
         historyScreen.textContent += secondNumber;
     }
-
-    secondNumber = '';
 }
 
 function validateInput(input) {
