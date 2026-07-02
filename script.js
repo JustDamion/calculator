@@ -26,7 +26,7 @@ inputContainer.addEventListener("click", (event) => {
 });
 
 function updateInput(value) {
-    if (+value || +value === 0) {
+    if (+value || +value === 0 || (value === "." && !currentInput.textContent.includes("."))) {
         if (OPERATORS.includes(lastInput)) {
             currentInput.textContent = '';
         }
@@ -67,7 +67,7 @@ function validateInput(input) {
         errorMessage.textContent = "Please enter a number";
         return 0;
     }
-    if (currentInput.textContent === "0" && (OPERATORS.includes(input) || input === "=")) {
+    if (currentInput.textContent === "0" && (OPERATORS.includes(input) || input === "=" || input === ".")) {
         errorMessage.textContent = "Please enter a number";
         return 0;
     }
